@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requests For Outpass</title>
+    <link rel="stylesheet" href="/css-studenthistory.css">
+</head>
+<body>
+    <div class="back"></div>
+    <section>
+        <div class="card-content">
+            <a href="/Register" class="image">Back</a>
+            <div class="register-title">
+                <h2>History</h2>
+                <div class="line"></div>
+                <% if (database.length > 0) { %>
+                    <p class="head"><%= database[0].student_name %> - <%= database[0].register_number %></p>
+                <% } else { %>
+                    <p class="head">No data available</p>
+                <% } %>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Register Number</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Purpose Of Outpass</th>
+                        <th>Parent Contact Number</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% database.forEach(function(student) { %>
+                    <tr>
+                        <td><%= student.student_name %></td>
+                        <td><%= student.register_number %></td>
+                        <td><%= student.department %></td>
+                        <td><%= student.year %></td>
+                        <td><%= student.purpose_of_outpass %></td>
+                        <td><%= student.parent_conduct_number %></td>
+                        <td><%= student.from_date %></td>
+                        <td><%= student.to_date %></td>
+                        <td>Download</td>
+
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>
