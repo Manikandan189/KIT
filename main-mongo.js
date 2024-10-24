@@ -3,7 +3,6 @@ const express=require('express')
 const bodyParser=require('body-parser')
 const path=require('path')
 const session = require('express-session');
-const twilio = require('twilio');
 const {Account,Database,Security_Database,ToDatabase,Tohistory, Principal_Database}=require('./schema-mongo');
 const { Media } = require('twilio/lib/twiml/MessagingResponse');
 const app=express()
@@ -20,7 +19,7 @@ async function main()
 }
 
 app.use(session({
-    secret: 'your_secret_key',
+    secret: 'Mani091',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }    
@@ -348,10 +347,10 @@ app.post('/AdvisorVerify', async (req, res) => {
 
            student.status="hod";
            await student.save();
-           console.log(student.parent_conduct_number);
-           const studentPhoneNumber = +91+student.parent_conduct_number;
-           const studentName = student.student_name;
-           await sendApprovalMessageToStudent(studentPhoneNumber, studentName,"Advisor");
+        //    console.log(student.parent_conduct_number);
+        //    const studentPhoneNumber = +91+student.parent_conduct_number;
+        //    const studentName = student.student_name;
+        //    await sendApprovalMessageToStudent(studentPhoneNumber, studentName,"Advisor");
         }
         if (rejected_btn==="reject" && S_Id) {
             const deleteResult = await Database.deleteOne({ _id: S_Id });
@@ -503,11 +502,11 @@ app.post('/StaffVerify', async (req, res) => {
             }
            student.status="principal";
            await student.save();
-           console.log("st",status);
-           console.log(student.parent_conduct_number);
-           const studentPhoneNumber = +91+student.parent_conduct_number;
-           const studentName = student.student_name;
-           await sendApprovalMessageToStudent(studentPhoneNumber, studentName,"HOD");
+        //    console.log("st",status);
+        //    console.log(student.parent_conduct_number);
+        //    const studentPhoneNumber = +91+student.parent_conduct_number;
+        //    const studentName = student.student_name;
+        //    await sendApprovalMessageToStudent(studentPhoneNumber, studentName,"HOD");
         }
         if (rejected_btn==="reject" && S_Id) {
             const deleteResult = await Database.deleteOne({ _id: S_Id });
@@ -661,20 +660,20 @@ app.post('/PrincipalVerify', async (req, res) => {
 
             student.status = "security";
             await student.save();
-            console.log(student.parent_conduct_number);
-            console.log(student.student_name);
-            const studentPhoneNumber = +91+student.parent_conduct_number;
-            const studentName = student.student_name;
-            await sendApprovalMessageToStudent(studentPhoneNumber, studentName,"Principal");
+            // console.log(student.parent_conduct_number);
+            // console.log(student.student_name);
+            // const studentPhoneNumber = +91+student.parent_conduct_number;
+            // const studentName = student.student_name;
+            // await sendApprovalMessageToStudent(studentPhoneNumber, studentName,"Principal");
         }
 
         if (rejected_btn === "reject" && S_Id) {
             const student = await Database.findById(S_Id);
-            console.log(student.phone_number_R);
-            console.log(student.student_name);
-            const studentPhoneNumber = +917395851198;
-            const studentName = student.student_name;
-            await sendRejectMessageToStudent(studentPhoneNumber, studentName);
+            // console.log(student.phone_number_R);
+            // console.log(student.student_name);
+            // const studentPhoneNumber = +917395851198;
+            // const studentName = student.student_name;
+            // await sendRejectMessageToStudent(studentPhoneNumber, studentName);
 
 
 
@@ -891,35 +890,6 @@ app.get('/History', async (req, res) => {
     }
 });
 
-
-
-
-
-const accountSid = 'ACb49c47989e138374e8fd5a190d9c5192';
-const authToken = '4ae0a357ad5f7dc22d5ae7fc5e7ab7f3';
-const client = new twilio(accountSid, authToken);
-
-function sendApprovalMessageToStudent(studentPhoneNumber, studentName,approvedBy) {
-    client.messages.create({
-        body: `Hello ${studentName}, your request has been approved by the ${approvedBy}, Thank You`,
-        from: 'whatsapp:+14155238886', // Your Twilio WhatsApp number
-        to: `whatsapp:${studentPhoneNumber}`, // Student's phone number in WhatsApp format 
-    })
-    .then(message => console.log("Message sent with SID: " + message.sid))
-    .catch(error => console.error("Error sending message:", error));
-    console.log(client.message);
-}
-
-
-function sendRejectMessageToStudent(studentPhoneNumber, studentName) {
-    client.messages.create({
-        body: `Hello ${studentName}, your request has been Rejected by the principal`,
-        from: 'whatsapp:+14155238886', // Your Twilio WhatsApp number
-        to: `whatsapp:${studentPhoneNumber}` // Student's phone number in WhatsApp format
-    })
-    .then(message => console.log("Message sent with SID: " + message.sid))
-    .catch(error => console.error("Error sending message:", error));
-}
 
 
 //port
